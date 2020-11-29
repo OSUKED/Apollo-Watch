@@ -30,6 +30,6 @@ jobs:
     - name: Updating data
       run: python update_data.py
       env:
-        GITHUB_TOKEN: ${{ secrets.SLACK_WEBHOOK_URL }}
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
       
     - uses: stefanzweifel/git-auto-commit-action@v4 
