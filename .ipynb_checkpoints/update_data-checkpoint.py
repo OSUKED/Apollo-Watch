@@ -100,7 +100,7 @@ def retrieve_cleaned_market_analysis(webhook_url=None):
     date = get_analysis_date()
     analysis_url = create_analysis_url(date)
     
-    json_message = check_page_exists(url, f'A market analysis page could not be found for {date}', webhook_url)
+    json_message = check_page_exists(analysis_url, f'A market analysis page could not be found for {date}', webhook_url)
     if json_message['message'] != 'success':
         return json_message
         
@@ -113,7 +113,6 @@ def retrieve_cleaned_market_analysis(webhook_url=None):
 """
 General Helper Functions
 """
-
 def handle_error_message(message, webhook_url=None):
     warn(message)
 
