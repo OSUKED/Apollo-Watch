@@ -13,9 +13,13 @@ from dotenv import load_dotenv
 """
 Price Data Functions
 """
-def retrieve_market_prices():
+def retrieve_market_prices(webhook_url=None):
     prices_url = 'https://www.apolloenergy.co.uk/news/current-uk-energy-prices'
     markets = ['Power', 'Gas', 'Brent & Coal']
+    
+    json_message = check_page_exists(prices_url, 'The energy prices page could not be found', webhook_url)
+    if json_message['message'] != 'success':
+        return json_message
     
     r = requests.get(prices_url)
     tables = pd.read_html(r.text)
@@ -93,16 +97,21 @@ def clean_market_analysis(market_analysis):
 
     return market_analysis
 
+def check_page_exists(url, message, webhook_url=None):
+    try:
+        requests.get(url).raise_for_status() # checks page can be retrieved
+        json_message = {'message': 'success'}
+    except:
+        json_message = handle_error_message(message, webhook_url)
+            
+    return json_message
+
 def retrieve_cleaned_market_analysis(webhook_url=None):
     date = get_analysis_date()
     analysis_url = create_analysis_url(date)
     
-    try:
-        requests.get(analysis_url).raise_for_status() # checks page can be retrieved
-    except:
-        message = f'A market analysis page could not be found for {date}'
-        json_message = handle_error_message(message, webhook_url)
-            
+    json_message = check_page_exists(url, f'A market analysis page could not be found for {date}', webhook_url)
+    if json_message['message'] != 'success':
         return json_message
         
     market_analysis = extract_market_analysis(analysis_url)
@@ -158,10 +167,10 @@ retrieval_steps = {
 for step_name, step_meta in retrieval_steps.items():
     func, error_message = step_meta.values()
     
-#     try:
-    data = func(webhook_url)
-#     except:
-#         data = handle_error_message(error_message, webhook_url)
+    try:
+        data = func(webhook_url)
+    except:
+        data = handle_error_message(error_message, webhook_url)
 
     with open(f'data/{step_name}.json', 'w') as fp:
         json.dump(data, fp)
