@@ -16,8 +16,11 @@ Price Data Functions
 def retrieve_market_prices():
     prices_url = 'https://www.apolloenergy.co.uk/news/current-uk-energy-prices'
     markets = ['Power', 'Gas', 'Brent & Coal']
+    
+    r = requests.get(prices_url)
+    tables = pd.read_html(r.text)
 
-    price_data = [df.set_index(df.columns[0]).T.to_dict() for df in pd.read_html(prices_url)]
+    price_data = [df.set_index(df.columns[0]).T.to_dict() for df in tables]
     price_data = dict(zip(markets, price_data))
     
     return price_data
@@ -48,10 +51,13 @@ def handle_error_message(message, webhook_url=None):
     return json_message
 
 def extract_market_analysis(analysis_url):
-    power_data = pd.read_html(analysis_url)[0].iloc[:, 0].to_list()
-    gas_data = pd.read_html(analysis_url)[0].iloc[:, 1].to_list()
+    r = requests.get(analysis_url)
+    tables = pd.read_html(r.text)
+    
+    power_data = tables[0].iloc[:, 0].to_list()
+    gas_data = tables[0].iloc[:, 1].to_list()
 
-    brent_analysis_txt = pd.read_html(analysis_url)[1].iloc[0, 0]
+    brent_analysis_txt = tables[1].iloc[0, 0]
     brent_sections = ['Brent Summary', '1-year forward prices']
     brent_content = [elem.strip() for elem in re.split(' |'.join(brent_sections), brent_analysis_txt) if elem != '']
     brent_data = dict(zip(brent_sections, brent_content))
