@@ -1,0 +1,32 @@
+name: Update data
+
+on:
+  push:
+  schedule:
+  - cron: "45 9 * * 1-5"
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+      
+    - name: Set up Python
+      uses: actions/setup-python@v1
+      with:
+        python-version: '3.x'
+    - name: Install dependencies
+      run: |
+        dir
+        python -m pip install --upgrade pip
+        python -m pip install pandas
+        python -m pip install requests
+        python -m pip install lxml
+        python -m pip install re
+        python -m pip install FEAutils
+        python -m pip install python-dotenv
+        python update_data.py
+        dir
+      
+    - uses: stefanzweifel/git-auto-commit-action@v4 
