@@ -13,7 +13,7 @@ from dotenv import load_dotenv
 """
 Price Data Functions
 """
-def retrieve_price_data():
+def retrieve_market_prices():
     prices_url = 'https://www.apolloenergy.co.uk/news/current-uk-energy-prices'
     markets = ['Power', 'Gas', 'Brent & Coal']
 
@@ -144,8 +144,8 @@ retrieval_steps = {
          'error_message': f'The market analysis page for {get_analysis_date()} could not be retrieved/processed'
      },
      'market_prices': {
-         'func': retrieve_price_data,
-         'error_message': 'The latest price data could not be retrieved'
+         'func': retrieve_market_prices,
+         'error_message': 'The latest market prices could not be retrieved'
      },
  }
 
