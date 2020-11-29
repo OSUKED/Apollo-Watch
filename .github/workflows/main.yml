@@ -23,6 +23,7 @@ jobs:
         python -m pip install pandas
         python -m pip install requests
         python -m pip install lxml
+        python -m pip install ipython
         python -m pip install FEAutils
         python -m pip install python-dotenv
         python update_data.py
