@@ -158,10 +158,10 @@ retrieval_steps = {
 for step_name, step_meta in retrieval_steps.items():
     func, error_message = step_meta.values()
     
-    try:
-        data = func(webhook_url)
-    except:
-        data = handle_error_message(error_message, webhook_url)
+#     try:
+    data = func(webhook_url)
+#     except:
+#         data = handle_error_message(error_message, webhook_url)
 
     with open(f'data/{step_name}.json', 'w') as fp:
         json.dump(data, fp)
