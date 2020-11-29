@@ -16,6 +16,7 @@ jobs:
       uses: actions/setup-python@v1
       with:
         python-version: '3.x'
+        
     - name: Install dependencies
       run: |
         dir
@@ -26,6 +27,9 @@ jobs:
         python -m pip install ipython
         python -m pip install FEAutils
         python -m pip install python-dotenv
+        
+    - name: Updating data
+      run: |
         python update_data.py
         dir
       
