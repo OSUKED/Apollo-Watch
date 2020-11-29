@@ -44,16 +44,6 @@ def get_analysis_date():
 
     return date
 
-def handle_error_message(message, webhook_url=None):
-    warn(message)
-
-    if webhook_url is not None:
-        hlp.send_slack_msg(message, webhook_url)    
-    
-    json_message = {'message': message}
-    
-    return json_message
-
 def extract_market_analysis(analysis_url):
     r = requests.get(analysis_url)
     tables = pd.read_html(r.text)
@@ -123,6 +113,17 @@ def retrieve_cleaned_market_analysis(webhook_url=None):
 """
 General Helper Functions
 """
+
+def handle_error_message(message, webhook_url=None):
+    warn(message)
+
+    if webhook_url is not None:
+        hlp.send_slack_msg(message, webhook_url)    
+    
+    json_message = {'message': message}
+    
+    return json_message
+
 def update_readme_time(readme_fp, 
                        splitter='Last updated: ', 
                        dt_format='%Y-%m-%d %H:%M'):
