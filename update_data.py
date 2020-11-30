@@ -41,6 +41,8 @@ def get_analysis_date():
     if current_weekday > 4:
         days_to_offset = current_weekday - 4
         date = (pd.Timestamp.now() - pd.Timedelta(days=days_to_offset)).strftime('%Y-%m-%d')
+    else:
+        date = pd.Timestamp.now().strftime('%Y-%m-%d')
 
     return date
 
