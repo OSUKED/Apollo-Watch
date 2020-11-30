@@ -3,7 +3,7 @@ name: Update data
 on:
   push:
   schedule:
-  - cron: "45 9 * * 1-5"
+  - cron: "45 10 * * 1-5"
 
 jobs:
   run:
